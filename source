@@ -65090,12 +65090,15 @@ typedef (<span>HTMLOrSVGImageElement</span> or
 
 enum <dfn enum>PredefinedColorSpace</dfn> { "<span data-x="dom-PredefinedColorSpace-srgb">srgb</span>", "<span data-x="dom-PredefinedColorSpace-display-p3">display-p3</span>" };
 
+enum <dfn enum>CanvasColorType</dfn> { "<span data-x="dom-CanvasColorType-unorm8">nonzero</span>", "<span data-x="dom-CanvasColorType-float16">float16</span>" };
+
 enum <dfn enum>CanvasFillRule</dfn> { "<span data-x="dom-context-2d-fillRule-nonzero">nonzero</span>", "<span data-x="dom-context-2d-fillRule-evenodd">evenodd</span>" };
 
 dictionary <dfn dictionary>CanvasRenderingContext2DSettings</dfn> {
   boolean <span data-x="dom-CanvasRenderingContext2DSettings-alpha">alpha</span> = true;
   boolean <span data-x="dom-CanvasRenderingContext2DSettings-desynchronized">desynchronized</span> = false;
   <span>PredefinedColorSpace</span> <span data-x="dom-CanvasRenderingContext2DSettings-colorSpace">colorSpace</span> = "<span data-x="dom-PredefinedColorSpace-srgb">srgb</span>";
+  <span>CanvasColorType</span> <span data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</span> = "<span data-x="dom-CanvasColorType-unorm8">unorm8</span>";
   boolean <span data-x="dom-CanvasRenderingContext2DSettings-willReadFrequently">willReadFrequently</span> = false;
 };
 
@@ -65383,6 +65386,10 @@ interface <dfn interface>Path2D</dfn> {
     specifies the <span data-x="concept-canvas-color-space">color space</span> of the rendering
     context.</p>
 
+    <p>The <code data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</code> member
+    specifies the <span data-x="concept-canvas-color-type">color type</span> of the rendering
+    context.</p>
+
     <p>If the <code
     data-x="dom-CanvasRenderingContext2DSettings-willReadFrequently">willReadFrequently</code>
     member is true, then the context is marked for <span
@@ -65406,6 +65413,9 @@ interface <dfn interface>Path2D</dfn> {
      <li><code data-x="dom-CanvasRenderingContext2DSettings-colorSpace">colorSpace</code> member is
      a string indicating the context's <span data-x="concept-canvas-color-space">color
      space</span>.</li>
+
+     <li><code data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</code> member is
+     a string indicating the context's <span data-x="concept-canvas-color-type">color type</span>.</li>
 
      <li><code data-x="dom-CanvasRenderingContext2DSettings-willReadFrequently">willReadFrequently</code>
      member is true if the context is marked for <span data-x="concept-canvas-will-read-frequently">readback
@@ -65487,6 +65497,12 @@ interface <dfn interface>Path2D</dfn> {
   data-x="concept-canvas-color-space">color space</span> indicates the color space for the
   <span>output bitmap</span>.</p>
 
+  <p>The <code>CanvasRenderingContext2D</code> object also has a <dfn
+  data-x="concept-canvas-color-type">color type</dfn> setting of type
+  <code>CanvasColorType</code>. The <code>CanvasRenderingContext2D</code> object's <span
+  data-x="concept-canvas-color-type">color type</span> indicates the type of color channels
+  of the pixels of the <span>output bitmap</span>.</p>
+
   <p>The <dfn method for="CanvasRenderingContext2D"><code
   data-x="dom-context-2d-canvas-getcontextattributes">getContextAttributes()</code></dfn> method
   steps are to return «[ "<code data-x="dom-CanvasRenderingContext2DSettings-alpha">alpha</code>" →
@@ -65495,6 +65511,8 @@ interface <dfn interface>Path2D</dfn> {
   <span>this</span>'s <span data-x="concept-canvas-desynchronized">desynchronized</span>, "<code
   data-x="dom-CanvasRenderingContext2DSettings-colorSpace">colorSpace</code>" → <span>this</span>'s
   <span data-x="concept-canvas-color-space">color space</span>, "<code
+  data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</code>" → <span>this</span>'s
+  <span data-x="concept-canvas-color-type">color type</span>, "<code
   data-x="dom-CanvasRenderingContext2DSettings-willReadFrequently">willReadFrequently</code>" →
   <span>this</span>'s <span data-x="concept-canvas-will-read-frequently">will read frequently</span>
   ]».</p>
@@ -65566,6 +65584,10 @@ interface <dfn interface>Path2D</dfn> {
    <var>settings</var>["<dfn dict-member for="CanvasRenderingContext2DSettings"><code
    data-x="dom-CanvasRenderingContext2DSettings-colorSpace">colorSpace</code></dfn>"].</p></li>
 
+   <li><p>Set <var>context</var>'s <span data-x="concept-canvas-color-type">color type</span> to
+   <var>settings</var>["<dfn dict-member for="CanvasRenderingContext2DSettings"><code
+   data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</code></dfn>"].</p></li>
+
    <li><p>Set <var>context</var>'s <span
    data-x="concept-canvas-will-read-frequently">will read frequently</span> to
    <var>settings</var>["<dfn dict-member for="CanvasRenderingContext2DSettings"><code
@@ -65635,6 +65657,19 @@ context.fillRect(100,0,50,50); // only this square remains</code></pre>
 
   <p class="note">The algorithm for converting between color spaces can be found in the
   <span>Converting Colors</span> section of <cite>CSS Color</cite>. <ref>CSSCOLOR</ref></p>
+
+  <hr>
+
+  <p>The <code>CanvasColorType</code> enumeration is used to specify the <span
+  data-x="concept-canvas-color-type">color type</span> of the canvas's backing store.</p>
+
+  <p>The "<dfn enum-value for="CanvasColorType"><code
+  data-x="dom-CanvasColorType-unorm8">unorm8</code></dfn>" value indicates that the type
+  for all color channels is 8-bit unsigned normalized.</p>
+
+  <p>The "<dfn enum-value for="CanvasColorType"><code
+  data-x="dom-CanvasColorType-float16">float16</code></dfn>" value indicates that the type
+  for all color channels is 16-bit floating point.</p>
 
   <hr>
 
@@ -71421,6 +71456,12 @@ interface <dfn interface>OffscreenCanvasRenderingContext2D</dfn> {
   data-x="offscreencontext2d-bitmap">bitmap</span> is set to the context's <span
   data-x="offscreencontext2d-color-space">color space</span>.</p>
 
+  <p>An <code>OffscreenCanvasRenderingContext2D</code> object also has a <dfn
+  data-x="offscreencontext2d-color-type">color type</dfn> setting of type
+  <code>CanvasColorType</code>. The data type for the color channels of the pixels
+  of the context's <span data-x="offscreencontext2d-bitmap">bitmap</span> is set
+  to the context's <span data-x="offscreencontext2d-color-type">color type</span>.</p>
+
   <p>An <code>OffscreenCanvasRenderingContext2D</code> object has an <dfn>associated
   <code>OffscreenCanvas</code> object</dfn>, which is the <code>OffscreenCanvas</code> object
   from which the <code>OffscreenCanvasRenderingContext2D</code> object was created.
@@ -71458,6 +71499,10 @@ interface <dfn interface>OffscreenCanvasRenderingContext2D</dfn> {
    <li><p>Set <var>context</var>'s <span data-x="offscreencontext2d-color-space">color space</span>
    to <var>settings</var>["<code
    data-x="dom-CanvasRenderingContext2DSettings-colorSpace">colorSpace</code>"].</p></li>
+
+   <li><p>Set <var>context</var>'s <span data-x="offscreencontext2d-color-type">color space</span>
+   to <var>settings</var>["<code
+   data-x="dom-CanvasRenderingContext2DSettings-colorType">colorType</code>"].</p></li>
 
    <li><p>Set <var>context</var>'s <span data-x="offscreencontext2d-bitmap">bitmap</span> to a newly
    created bitmap with the dimensions specified by the <code
